@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { UserContext } from "../providers/UserProvider";
+import { UserContext, useUser } from "../providers/UserProvider";
 import { auth } from "../config/firebase";
 import Buy from "./Buy";
 import OpenPos from "./OpenPos";
@@ -8,7 +8,7 @@ import DisplayPos from "./DisplayPos";
 import DisplayStock from "./StockPage";
 
 const ProfilePage = () => {
-  const user = useContext(UserContext);
+  const user = useUser();
   const { photoURL, displayName, email, availBalance, unrealisedBalance } =
     user;
   console.log(user);

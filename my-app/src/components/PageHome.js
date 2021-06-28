@@ -1,6 +1,7 @@
-import React, { useContext } from "react";
-import { UserContext } from "../providers/UserProvider";
+import React, { useState, useContext } from "react";
+import { useUser } from "../providers/UserProvider";
 import { makeStyles } from "@material-ui/core/styles";
+import { firebase } from "@firebase/app";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -12,15 +13,28 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Home = () => {
-  const user = useContext(UserContext);
-  const {
-    photoURL,
-    displayName,
-    email,
-    availBalance,
-  } = user; //removed unrealised Balance from para
-  console.log(user);
+  // const user = firebase.auth().currentUser; // CAUSING ERROR, Context == null
+  const user = useUser();
+
+  const [avail, setAvail] = useState("");
   const classes = useStyles();
+
+  if (!user) {
+    return <div className="hi">loading... </div>;
+  }
+  const uid = user?.uid;
+  firebase
+    .firestore()
+    .collection("users")
+    .doc(uid)
+    .get()
+    .then((snapshot) => setAvail(snapshot.data()));
+  const availBalance = avail?.availBalance;
+  const photoURL = user?.photoURL;
+  const displayName = user?.displayName;
+  const email = user?.email;
+
+  // const { photoURL, displayName, email, availBalance } = user; //removed unrealised Balance from para
 
   return (
     <div className={classes.paper}>

@@ -7,8 +7,9 @@ import Portfolio from "./components/pages/PagePortfolio";
 import Profile from "./components/pages/PageProfile";
 import LogOut from "./components/pages/PageLogOut";
 import "./App.css";
-import UserProvider from "./providers/UserProvider";
+import { useUser } from "./providers/UserProvider";
 import PageAuth from "./components/pages/PageLogin";
+import { firebase } from "./config/firebase";
 
 // var rootStyle = {
 //   backgroundColor: "green",
@@ -17,26 +18,33 @@ import PageAuth from "./components/pages/PageLogin";
 // };
 
 function App() {
+  const user = useUser();
   return (
     <>
       <div className="App">
-        <IfFirebaseAuthed>
-          <UserProvider>
-            <Router>
-              <Navbar />
-              <Switch>
+        {/* <IfFirebaseAuthed>
+          <UserProvider> */}
+        <Router>
+          <Navbar />
+          <Switch>
+            {user ? (
+              <>
                 <Route path="/" exact component={Home} />
                 <Route path="/trade" component={Trade} />
                 <Route path="/portfolio" component={Portfolio} />
                 <Route path="/profile" component={Profile} />
                 <Route path="/logout" component={LogOut} />
-              </Switch>
-            </Router>
-          </UserProvider>
-        </IfFirebaseAuthed>
-        <IfFirebaseUnAuthed>
-          <PageAuth />
-        </IfFirebaseUnAuthed>
+              </>
+            ) : (
+              <PageAuth />
+            )}
+          </Switch>
+        </Router>
+        {/* </UserProvider> */}
+        {/* </IfFirebaseAuthed> */}
+        {/* <IfFirebaseUnAuthed> */}
+
+        {/* </IfFirebaseUnAuthed> */}
       </div>
     </>
   );
@@ -57,4 +65,3 @@ export default App;
 //   );
 // }
 // export default App;
-

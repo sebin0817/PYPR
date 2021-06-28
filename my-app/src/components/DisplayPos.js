@@ -1,20 +1,25 @@
 import { useState, useEffect, useContext } from "react";
 import { firestore } from "../config/firebase";
-import { UserContext } from "../providers/UserProvider";
+import { useUser } from "../providers/UserProvider";
 import "./Tables.css";
 
 function DisplayPos() {
-  const user = useContext(UserContext);
+  const user = useUser();
   const [positions, setPositions] = useState([]); //create state to store data
 
   useEffect(() => {
+    if (!user) {
+      return;
+    }
+    console.log(user);
+    console.log(user.email);
     firestore
       .collection("positions")
       .where("userID", "==", user.email)
       .onSnapshot((snapshot) => {
         setPositions(snapshot.docs.map((doc) => doc.data()));
       });
-  });
+  }, [user]);
   return (
     <table class="DisplayTable">
       <thead>

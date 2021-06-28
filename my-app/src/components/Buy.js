@@ -9,12 +9,20 @@ funtions:
 */
 import React, { useState, useContext } from "react";
 import { firestore } from "../config/firebase";
-import { UserContext } from "../providers/UserProvider";
+import { useUser } from "../providers/UserProvider";
 import firebase from "firebase/app";
 import { Button } from "@material-ui/core";
 
 function Buy({ ticker }) {
-  const user = useContext(UserContext);
+  const user = useUser();
+
+  const [trade, setTrade] = useState(null);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState(false);
+
+  if (!user) {
+    return <p>Loading!!!</p>;
+  }
 
   const initialTradeState = {
     tradeID: "",
@@ -25,9 +33,8 @@ function Buy({ ticker }) {
     userID: user.email,
     type: "buy",
   };
-  const [trade, setTrade] = useState(initialTradeState);
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState(false);
+
+  setTrade(initialTradeState);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;

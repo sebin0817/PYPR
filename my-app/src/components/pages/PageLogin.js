@@ -3,6 +3,8 @@ import { Button, Container } from "@material-ui/core"; //Box, Paper,
 import image from "../Images/img-01.png";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import { firebase, signInWithGoogle } from "../../config/firebase";
+import { useUser } from "../../providers/UserProvider";
 import "./PageLogin.css";
 
 var rootStyle = {
@@ -21,9 +23,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function PageAuth() {
-  const handleSignIn = (firebase) => {
-    const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithPopup(googleAuthProvider);
+  const user = useUser();
+  const handleSignIn = () => {
+    signInWithGoogle();
   };
 
   const classes = useStyles();
@@ -37,17 +39,9 @@ function PageAuth() {
             <img src={image} alt="IMG" />
           </div>
           <div className="SignIn">
-            <FirebaseAuthConsumer>
-              {({ firebase }) => (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleSignIn(firebase)}
-                >
-                  Sign in with Google
-                </Button>
-              )}
-            </FirebaseAuthConsumer>
+            <Button variant="contained" color="primary" onClick={handleSignIn}>
+              Sign in with Google
+            </Button>
           </div>
         </div>
       </Container>

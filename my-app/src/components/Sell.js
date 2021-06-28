@@ -1,11 +1,11 @@
 import React, { useState, useContext } from "react";
 import { firestore } from "../config/firebase";
-import { UserContext } from "../providers/UserProvider";
+import { useUser } from "../providers/UserProvider";
 import firebase from "firebase/app";
 import { Button } from "@material-ui/core";
 
 function Sell({ ticker }) {
-  const user = useContext(UserContext);
+  const user = useUser();
 
   const [quantity, setQuantity] = useState(0);
   const [submitted, setSubmitted] = useState(false);

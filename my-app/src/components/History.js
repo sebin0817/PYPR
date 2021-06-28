@@ -13,15 +13,18 @@ funtions:
 
 import React, { useState, useEffect, useContext } from "react";
 import { firestore } from "../config/firebase";
-import { UserContext } from "../providers/UserProvider";
+import { useUser } from "../providers/UserProvider";
 import "./Tables.css";
 
 function History() {
-  const user = useContext(UserContext);
+  const user = useUser();
   const [buys, setBuys] = useState([]);
   const [sells, setSells] = useState([]);
 
   useEffect(() => {
+    if (!user) {
+      return;
+    }
     firestore
       .collection("trades")
       .where("userID", "==", user.email)
@@ -36,7 +39,7 @@ function History() {
       .onSnapshot((snapshot) => {
         setSells(snapshot.docs.map((doc) => doc.data()));
       });
-  });
+  }, [user]);
 
   return (
     <div className="History">

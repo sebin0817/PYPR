@@ -22,14 +22,23 @@ export const config = {
     */
 };
 firebase.initializeApp(config);
+console.log("firebase setup is run!!!");
 
-export const auth = firebase.auth();
+window.fb = firebase;
+
 export const firestore = firebase.firestore();
+export { firebase };
 export default firebase.firestore();
 
 const provider = new firebase.auth.GoogleAuthProvider();
 export const signInWithGoogle = () => {
-  auth.signInWithPopup(provider);
+  firebase
+    .auth()
+    .signInWithPopup(provider)
+    .then((result) => {
+      console.log(result);
+      console.log(firebase.auth()?.currentUser);
+    });
 };
 
 export const generateUserDocument = async (user, additionalData) => {
@@ -69,4 +78,3 @@ const getUserDocument = async (uid) => {
     console.error("Error fetching user", error);
   }
 };
-
